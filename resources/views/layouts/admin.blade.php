@@ -107,22 +107,38 @@
                         alt=""
                         class="rounded-circle mr-2 profile-picture"
                       />
-                      Hi, User
+                       Hi, {{Auth::user()->name}}
                     </a>
                     <div class="dropdown-menu">
-                      <a href="/" class="dropdown-item">Logout</a>
+                      <a href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
+                          class="dropdown-item">Logout</a>
+
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                          @csrf
+                      </form>
+
                     </div>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link d-inline-block mt-2">
-                      <img src="/images/icon-cart-empty.svg" alt="cart" />
-                      <div class="card-badge">3</div>
+                    <a href="{{ route('cart') }}" class="nav-link d-inline-block mt-2">
+                        @php
+                          $carts= \App\Models\Cart::where('users_id', Auth::user()->id)->count();
+                        @endphp
+                        @if ($carts>0)
+                          <img src="/images/icon-cart-empty.svg" alt="cart" />
+                          <div class="card-badge">{{$carts}}</div>
+                        @else
+                          <img src="/images/icon-cart-empty.svg" alt="cart" />
+                        @endif
                     </a>
                   </li>
                 </ul>
                 <ul class="navbar-nav d-block d-lg-none">
                   <li class="nav-item">
-                    <a href="#" class="nav-link"> Hi, User </a>
+                    <a href="#" class="nav-link"> Hi,  {{Auth::user()->name}} </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('cart') }}" class="nav-link d-inline-block">Cart</a>
                   </li>
                 </ul>
               </div>
